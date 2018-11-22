@@ -1,0 +1,35 @@
+{
+  "name": "noise-network",
+  "version": "0.0.0",
+  "description": "Authenticated P2P network backed by HyperSwarm and NOISE",
+  "main": "index.js",
+  "dependencies": {
+    "@hyperswarm/discovery": "^1.2.0",
+    "duplexify": "^3.6.1",
+    "nanoresource": "^1.0.0",
+    "noise-peer": "^1.0.0",
+    "sodium-native": "^2.2.3",
+    "utp-native": "^2.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mafintosh/noise-network.git"
+  },
+  "keywords": [
+    "noise",
+    "noise-peer",
+    "authenticated",
+    "p2p",
+    "hyperswarm"
+  ],
+  "author": "Mathias Buus (@mafintosh)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mafintosh/noise-network/issues"
+  },
+  "homepage": "https://github.com/mafintosh/noise-network#readme"
+}
