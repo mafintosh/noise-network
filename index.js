@@ -10,6 +10,7 @@ const { EventEmitter } = require('events')
 exports.globalAgent = null
 exports.agent = () => new NoiseAgent()
 exports.keygen = noise.keygen
+exports.seedKeygen = noise.seedKeygen
 exports.createServer = (opts) => new NoiseServer(opts)
 exports.connect = connect
 
@@ -164,10 +165,14 @@ class RawStream extends Duplexify {
 
     if (!peer.referrer) return
 
-    const utp = this.agent.utp.connect(peer.port, peer.host)
+    this.agent.discovery.holepunch(peer, function (err) {
+      if (err || self.connected || self.destroyed) return
 
-    utp.on('error', utp.destroy)
-    utp.on('connect', onconnect)
+      const utp = self.agent.utp.connect(peer.port, peer.host)
+
+      utp.on('error', utp.destroy)
+      utp.on('connect', onconnect)
+    })
 
     function onconnect () {
       if (self.destroyed || self.connected) return this.destroy()
