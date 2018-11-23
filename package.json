@@ -1,6 +1,6 @@
 {
   "name": "noise-network",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Authenticated P2P network backed by HyperSwarm and NOISE",
   "main": "index.js",
   "dependencies": {
