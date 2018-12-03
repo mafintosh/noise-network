@@ -220,7 +220,7 @@ class NoiseAgent extends Nanoresource {
   }
 
   _close (cb) {
-    this.discovery.close()
+    this.discovery.destroy()
     this.discovery.once('close', cb)
   }
 }
