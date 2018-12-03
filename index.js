@@ -158,7 +158,11 @@ class RawStream extends Duplexify {
 
   _connect (peer) {
     const self = this
-    const tcp = net.connect(peer.port, peer.host)
+    const tcp = net.connect({
+      port: peer.port,
+      host: peer.host,
+      allowHalfOpen: true
+    })
 
     tcp.on('error', tcp.destroy)
     tcp.on('connect', onconnect)
@@ -168,7 +172,7 @@ class RawStream extends Duplexify {
     this.agent.discovery.holepunch(peer, function (err) {
       if (err || self.connected || self.destroyed) return
 
-      const utp = self.agent.utp.connect(peer.port, peer.host)
+      const utp = self.agent.utp.connect(peer.port, peer.host, { allowHalfOpen: true })
 
       utp.on('error', utp.destroy)
       utp.on('connect', onconnect)
@@ -238,8 +242,8 @@ class ServerResource extends Nanoresource {
   _open (cb) {
     const self = this
 
-    this.utp = utp()
-    this.tcp = net.createServer()
+    this.utp = utp({ allowHalfOpen: true })
+    this.tcp = net.createServer({ allowHalfOpen: true })
 
     listenBoth(this.tcp, this.utp, function (err) {
       if (err) return cb(err)

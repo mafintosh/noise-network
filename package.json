@@ -11,9 +11,11 @@
     "sodium-native": "^2.2.3",
     "utp-native": "^2.1.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tape": "^4.9.1"
+  },
   "scripts": {
-    "test": "standard"
+    "test": "standard && node tests.js"
   },
   "repository": {
     "type": "git",
