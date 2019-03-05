@@ -57,14 +57,10 @@ class NoiseServer extends EventEmitter {
     })
 
     encryptedStream.on('handshake', function () {
-      process.nextTick(function () { // TODO: waiting for @emilbayes to fix this bug :D :D :D
-        if (!encryptedStream.destroyed) {
-          if (self.server.closed) return encryptedStream.destroy()
-          encryptedStream.on('close', self.connections.delete.bind(self.connections, encryptedStream))
-          self.connections.add(encryptedStream)
-          self.emit('connection', encryptedStream)
-        }
-      })
+      if (self.server.closed) return encryptedStream.destroy()
+      encryptedStream.on('close', self.connections.delete.bind(self.connections, encryptedStream))
+      self.connections.add(encryptedStream)
+      self.emit('connection', encryptedStream)
     })
 
     encryptedStream.on('error', function (err) {
