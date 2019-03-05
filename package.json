@@ -12,6 +12,7 @@
     "utp-native": "^2.1.3"
   },
   "devDependencies": {
+    "standard": "^12.0.1",
     "tape": "^4.9.1"
   },
   "scripts": {
