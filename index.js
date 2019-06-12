@@ -76,16 +76,10 @@ class NoiseServer extends EventEmitter {
     return this.server.tcp && this.server.tcp.address()
   }
 
-  listen (keyPair, cb) {
+  listen (keyPairs, cb) {
     if (!cb) cb = noop
 
-    if (!Buffer.isBuffer(keyPair.publicKey)) {
-      keyPair.publicKey = Buffer.from(keyPair.publicKey, 'hex')
-    }
-
-    if (!Buffer.isBuffer(keyPair.secretKey)) {
-      keyPair.secretKey = Buffer.from(keyPair.secretKey, 'hex')
-    }
+    var keyPair = maybeConvertKeys(keyPairs)
 
     const self = this
 
@@ -212,8 +206,7 @@ class NoiseAgent extends Nanoresource {
     this.open()
     this.active()
 
-    if (!Buffer.isBuffer(publicKey)) publicKey = Buffer.from(publicKey, 'hex')
-
+    publicKey = maybeConvertKeys(publicKey)
     const rawStream = new RawStream(this, publicKey)
 
     return noise(rawStream, true, {
@@ -313,4 +306,26 @@ function discoveryKey (publicKey) {
   const str = Buffer.from('noise-network')
   sodium.crypto_generichash(buf, str, publicKey)
   return buf
+}
+
+function maybeConvertKeys (keys) {
+  if (typeof keys === 'string' && !Buffer.isBuffer(keys)) {
+    return Buffer.from(keys, 'hex')
+  }
+
+  if (Buffer.isBuffer(keys)) return keys
+
+  const bKeyPair = {}
+  if (!Buffer.isBuffer(keys.publicKey)) {
+    bKeyPair.publicKey = Buffer.from(keys.publicKey, 'hex')
+  }
+
+  if (!Buffer.isBuffer(keys.secretKey)) {
+    bKeyPair.secretKey = Buffer.from(keys.secretKey, 'hex')
+  }
+
+  return {
+    publicKey: bKeyPair.publicKey ? bKeyPair.publicKey : keys.publicKey,
+    secretKey: bKeyPair.secretKey ? bKeyPair.secretKey : keys.secretKey
+  }
 }

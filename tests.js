@@ -22,8 +22,10 @@ test('destroy', function (assert) {
 })
 
 test('accepts keys as hex', { timeout: 1000 }, function (assert) {
-  assert.plan(3)
+  assert.plan(4)
   var server = network.createServer()
+  var serverKeys = network.keygen()
+
   var client
 
   server.on('connection', function (encryptedStream) {
@@ -33,13 +35,17 @@ test('accepts keys as hex', { timeout: 1000 }, function (assert) {
 
     encryptedStream.on('data', function (data) {
       assert.pass('received data')
+      assert.same(
+        keys.publicKey,
+        serverKeys.publicKey.toString('hex'),
+        'reference is not touched'
+      )
 
       server.close()
       client.end(assert.pass)
     })
   })
 
-  var serverKeys = network.keygen()
   var keys = {
     publicKey: serverKeys.publicKey.toString('hex'),
     secretKey: serverKeys.secretKey.toString('hex')
