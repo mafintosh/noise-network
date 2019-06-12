@@ -57,7 +57,8 @@ Options include:
 
 #### `const client = noise.connect(serverPublicKey, [keyPair])`
 
-Connect to a server. Does UDP hole punching if nessesary.
+Connect to a server. Does UDP hole punching if necessary.
+`serverPublicKey` must be of type Buffer or hex.
 
 ## License
 

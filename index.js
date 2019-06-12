@@ -79,6 +79,14 @@ class NoiseServer extends EventEmitter {
   listen (keyPair, cb) {
     if (!cb) cb = noop
 
+    if (!Buffer.isBuffer(keyPair.publicKey)) {
+      keyPair.publicKey = Buffer.from(keyPair.publicKey, 'hex')
+    }
+
+    if (!Buffer.isBuffer(keyPair.secretKey)) {
+      keyPair.secretKey = Buffer.from(keyPair.secretKey, 'hex')
+    }
+
     const self = this
 
     this.server.open(function (err) {
@@ -203,6 +211,8 @@ class NoiseAgent extends Nanoresource {
   connect (publicKey, keyPair) {
     this.open()
     this.active()
+
+    if (!Buffer.isBuffer(publicKey)) publicKey = Buffer.from(publicKey, 'hex')
 
     const rawStream = new RawStream(this, publicKey)
 
