@@ -79,7 +79,7 @@ class NoiseServer extends EventEmitter {
   listen (keyPairs, cb) {
     if (!cb) cb = noop
 
-    var keyPair = maybeConvertKeys(keyPairs)
+    var keyPair = maybeConvertKeyPair(keyPairs)
 
     const self = this
 
@@ -206,7 +206,7 @@ class NoiseAgent extends Nanoresource {
     this.open()
     this.active()
 
-    publicKey = maybeConvertKeys(publicKey)
+    publicKey = maybeConvertKey(publicKey)
     const rawStream = new RawStream(this, publicKey)
 
     return noise(rawStream, true, {
@@ -308,24 +308,13 @@ function discoveryKey (publicKey) {
   return buf
 }
 
-function maybeConvertKeys (keys) {
-  if (typeof keys === 'string' && !Buffer.isBuffer(keys)) {
-    return Buffer.from(keys, 'hex')
-  }
+function maybeConvertKey (key) {
+  return typeof key === 'string' ? Buffer.from(key, 'hex') : key
+}
 
-  if (Buffer.isBuffer(keys)) return keys
-
-  const bKeyPair = {}
-  if (!Buffer.isBuffer(keys.publicKey)) {
-    bKeyPair.publicKey = Buffer.from(keys.publicKey, 'hex')
-  }
-
-  if (!Buffer.isBuffer(keys.secretKey)) {
-    bKeyPair.secretKey = Buffer.from(keys.secretKey, 'hex')
-  }
-
+function maybeConvertKeyPair (keys) {
   return {
-    publicKey: bKeyPair.publicKey ? bKeyPair.publicKey : keys.publicKey,
-    secretKey: bKeyPair.secretKey ? bKeyPair.secretKey : keys.secretKey
+    publicKey: maybeConvertKey(keys.publicKey),
+    secretKey: maybeConvertKey(keys.secretKey)
   }
 }
