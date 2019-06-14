@@ -6,7 +6,7 @@
   "dependencies": {
     "@hyperswarm/discovery": "^1.2.0",
     "duplexify": "^3.6.1",
-    "nanoresource": "^1.0.0",
+    "nanoresource": "^1.2.0",
     "noise-peer": "^1.0.0",
     "sodium-native": "^2.2.3",
     "utp-native": "^2.1.3"

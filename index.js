@@ -15,15 +15,15 @@ exports.createServer = (opts) => new NoiseServer(opts)
 exports.connect = connect
 
 function connect (publicKey) {
-  if (typeof publicKey === 'string') publicKey = Buffer.from(publicKey, 'hex')
+  publicKey = maybeConvertKey(publicKey)
 
-  if (exports.globalAgent && !exports.globalAgent.closed) {
+  if (exports.globalAgent && !(exports.globalAgent.closed || exports.globalAgent.closing)) {
     return exports.globalAgent.connect(publicKey)
   }
 
   exports.globalAgent = new NoiseAgent()
   const stream = exports.globalAgent.connect(publicKey)
-  exports.globalAgent.close()
+  exports.globalAgent.close(true) // allow more actives
   return stream
 }
 
@@ -204,7 +204,7 @@ class NoiseAgent extends Nanoresource {
 
   connect (publicKey, keyPair) {
     this.open()
-    this.active()
+    if (!this.active()) throw new Error('Agent is closed')
 
     publicKey = maybeConvertKey(publicKey)
     const rawStream = new RawStream(this, publicKey)
