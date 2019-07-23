@@ -1,6 +1,6 @@
 # noise-network
 
-Authenticated network P2P backed by [HyperSwarm](https://github.com/hyperswarm) and [NOISE](https://github.com/emilbayes/noise-peer)
+Authenticated network P2P backed by [Hyperswarm](https://github.com/hyperswarm) and [Noise](https://github.com/emilbayes/noise-peer)
 
 ## Usage
 
@@ -42,7 +42,7 @@ client.write('hello server')
 
 #### `const server = noise.createServer([options])`
 
-Create a new NOISE server.
+Create a new Noise server.
 
 Options include:
 
